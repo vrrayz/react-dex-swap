@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Nav from "./components/Nav";
 import WalletModal from "./components/WalletModal";
+import Swap from "./components/Swap";
 
 import { ethers } from "ethers";
 import WalletConnectProvider from "@walletconnect/web3-provider";
@@ -77,6 +78,7 @@ function App() {
           connectDapp={connectDapp}
         />
       )}
+      <Swap/>
     </>
   );
 }
