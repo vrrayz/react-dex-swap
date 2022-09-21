@@ -3,7 +3,7 @@ import React from 'react'
 const Nav = ({setIsModalToggled,isModalToggled,isConnected,userAddress}) => {
   return (
     <nav className="custom-nav">
-        <a href="/h" className="nav-brand">Dapp-Connect</a>
+        <a href="/h" className="nav-brand">DexSwap</a>
         <button
           className="btn nav-btn"
           onClick={() => setIsModalToggled(!isModalToggled)}
