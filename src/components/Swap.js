@@ -53,29 +53,36 @@ const Swap = () => {
       const newCurrentToken = tokens.filter(
         (token) => token.address === address
       )[0];
-      option === "A"
-        ? setCurrentTokenA(newCurrentToken)
-        : setCurrentTokenB(newCurrentToken);
+      if (option === "A") {
+        setCurrentTokenA(newCurrentToken);
+        // setTokenAInput(calculateSwap(currentTokenB,currentTokenA,tokenBInput))
+      } else {
+        setCurrentTokenB(newCurrentToken);
+        // setTokenBInput(calculateSwap(currentTokenA,currentTokenB,tokenAInput))
+      }
       setIsListModalToggled(false);
       setCurrentTokenSelected("");
+      setTokenAInput(0.0)
+      setTokenBInput(0.0)
     }
   };
-  const calculateSwap = (tokenInput,value) => {
-    if(tokenInput === "tokenAInput" || tokenInput === "tokenBInput"){
-      if(tokenInput === "tokenAInput"){
-        setTokenAInput(value)
-        let bnbPriceBase = currentTokenA.price_BNB * value
-        let tokenPriceQuote = (1 / currentTokenB.price_BNB) * bnbPriceBase
-        setTokenBInput(tokenPriceQuote)
+  const setSwapInput = (tokenInput, value) => {
+    if (tokenInput === "tokenAInput" || tokenInput === "tokenBInput") {
+      if (tokenInput === "tokenAInput") {
+        setTokenAInput(value);
+        setTokenBInput(calculateSwap(currentTokenA,currentTokenB,value));
       }
-      if(tokenInput === "tokenBInput"){
-        setTokenBInput(value)
-        let bnbPriceBase = currentTokenB.price_BNB * value
-        let tokenPriceQuote = (1 / currentTokenA.price_BNB) * bnbPriceBase
-        setTokenAInput(tokenPriceQuote)
+      if (tokenInput === "tokenBInput") {
+        setTokenBInput(value);
+        setTokenAInput(calculateSwap(currentTokenB,currentTokenA,value));
       }
     }
   }
+  const calculateSwap = (baseObj,quoteObj, value) => {
+    let bnbPriceBase = baseObj.price_BNB * value;
+    let tokenPriceQuote = (1 / quoteObj.price_BNB) * bnbPriceBase;
+    return tokenPriceQuote
+  };
   useEffect(() => {
     getTokens();
   }, []);
@@ -104,7 +111,7 @@ const Swap = () => {
               <SwapInput
                 name="tokenAInput"
                 value={tokenAInput}
-                calculateSwap={calculateSwap}
+                setSwapInput={setSwapInput}
               />
               <button className="max-swap-btn">MAX</button>
             </div>
@@ -118,7 +125,7 @@ const Swap = () => {
               <SwapInput
                 name="tokenBInput"
                 value={tokenBInput}
-                calculateSwap={calculateSwap}
+                setSwapInput={setSwapInput}
               />
             </div>
             <div className="form-group">

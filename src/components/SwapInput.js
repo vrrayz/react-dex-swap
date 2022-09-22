@@ -1,8 +1,8 @@
 import React from "react";
 
-const SwapInput = ({ name, value, calculateSwap}) => {
+const SwapInput = ({ name, value, setSwapInput}) => {
   const setValue = (e) => {
-    calculateSwap(name,e.target.value)
+    setSwapInput(name,e.target.value)
   }
   return (
     <input
