@@ -1,31 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "../styles/TokenListModal.css";
 
-const url = "https://api.pancakeswap.info/api/v2/tokens";
-
-const TokenListModal = ({setIsListModalToggled,isListModalToggled}) => {
-  const [tokens, setToken] = useState([]);
-  const getTokens = () => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((tokens) => {
-        setToken(
-          Object.keys(tokens.data)
-            .map((key) => {
-              return { token: key, ...tokens.data[key] };
-            })
-            .filter((key, index) => {
-              return index < 20;
-            })
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  useEffect(() => {
-    getTokens();
-  }, [tokens]);
+const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled}) => {
   return (
     <div className="modal-overlay token-list-modal">
       <div className="modal-box token-list-modal">
