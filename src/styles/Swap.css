@@ -32,6 +32,7 @@
 }
 .swap-box .swap-body{
     padding: 12px;
+    padding-bottom: 18px;
     /* height: 100%;
     flex-grow: 1; */
 }
@@ -49,6 +50,10 @@
     padding: 4px;
     margin-bottom: 2px;
     border: none;
+    cursor: pointer;
+}
+.swap-select-btn:hover{
+    color: #bbb;
 }
 .swap-select-btn .token{
     margin: auto 0px auto 4px;
@@ -110,4 +115,9 @@
     border-radius: 12px;
     background-color: #07b7da;
     font-weight: bolder;
+    cursor: pointer;
+}
+.swap-btn:hover{
+    background-color: #37d7f6;
+    /* color: #f1f1f1; */
 }
