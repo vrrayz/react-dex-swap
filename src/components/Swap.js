@@ -35,6 +35,7 @@ const Swap = () => {
               </svg>
             </button>
             <input type="number" className="swap-form" step={"any"} placeholder="0.0" />
+            <button className="max-swap-btn">MAX</button>
           </div>
         </div>
       </div>
