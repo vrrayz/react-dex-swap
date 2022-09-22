@@ -6,8 +6,11 @@
     padding-bottom: 12px;
     width: 350px;
     height: 400px;
-    overflow: hidden;
-    overflow-y: scroll;
+}
+.modal-title.token-list-modal .title{
+    text-align: center;
+    flex-grow: 1;
+    margin-bottom: 8px;
 }
 ::-webkit-scrollbar {
 
@@ -29,6 +32,11 @@
 .modal-title.token-list-modal{
     background-color: transparent;
     padding: 12px 8px;
+}
+.modal-body{
+    overflow: hidden;
+    overflow-y: scroll;
+    padding-bottom: 12px;
 }
 .modal-body .swap-form{
     /* width: 90%; */

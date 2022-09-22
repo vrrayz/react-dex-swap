@@ -31,7 +31,7 @@ const Swap = () => {
         </div>
       </div>
     </div>
-    {isListModalToggled && (<TokenListModal />)}
+    {isListModalToggled && (<TokenListModal setIsListModalToggled={setIsListModalToggled} isListModalToggled={isListModalToggled}/>)}
     </>
   );
 };
