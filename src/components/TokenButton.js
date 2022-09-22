@@ -2,9 +2,17 @@ import React from "react";
 
 const TokenButton = ({token,toggleListModal,option}) => {
   const {symbol,img,address} = token
+  const checkLoadedImage = (e) => {
+    const isLoaded = e.target.complete && e.target.naturalHeight !== 0
+    if(!isLoaded){
+      e.target.src = "/img/logos/randomtoken.svg"
+      // console.log("Picture not complete")
+    }
+    // console.log(e.target.complete)
+  }
   return (
     <button className="swap-select-btn" onClick={() => toggleListModal(option)}>
-      <img src={img} alt={address} width="24"/>
+      <img src={img} alt={address} width="24" onError={checkLoadedImage}/>
       <span className="token">{symbol}</span>
       <svg
         viewBox="0 0 24 24"
