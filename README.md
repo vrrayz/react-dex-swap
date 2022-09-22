@@ -1,3 +1,3 @@
-# React Dapp Connect
+# React Dex Swap
 
-Simple Components Boilerplate you can use to connect to your wallets(Metamask, Walletconnect)
+A DexSwapp React App
