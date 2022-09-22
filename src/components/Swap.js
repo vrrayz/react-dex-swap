@@ -25,7 +25,7 @@ const Swap = () => {
               if (key === "0x3203c9E46cA618C8C1cE5dC67e7e9D75f5da2377") {
                 setCurrentTokenB(currentToken);
               }
-              return { currentToken };
+              return currentToken;
             })
             .filter((key, index) => {
               return index < 20;
@@ -38,7 +38,7 @@ const Swap = () => {
   };
   useEffect(() => {
     getTokens();
-  }, [tokens]);
+  }, []);
   return (
     <>
       <div className="swap-container">

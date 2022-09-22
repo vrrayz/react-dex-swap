@@ -4,8 +4,8 @@ import "../styles/TokenListModal.css";
 const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled}) => {
   return (
     <div className="modal-overlay token-list-modal">
-      <div className="modal-box token-list-modal">
-        <div className="modal-title token-list-modal">
+      <div className="modal-box">
+        <div className="modal-title">
             <h4 className="title">Select Token</h4>
           <button className="modal-close" onClick={() => setIsListModalToggled(!isListModalToggled)}>
             <svg
@@ -25,19 +25,21 @@ const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled}) => {
           <div className="form-group">
             <input
               type="text"
-              className="swap-form token-list-modal"
+              className="swap-form"
               placeholder="Token address or name"
             />
           </div>
-          {tokens.map((token) => (
-            <div className="token-list-item">
-              <div className="token-info">
-                <h4 className="token-name">{token.name}</h4>
-                <h5 className="token-symbol">{token.symbol}</h5>
-              </div>
-              <span className="token-balance">0</span>
-            </div>
-          ))}
+          {tokens.map((token) => 
+            (
+                <div className="token-list-item" key={token.address}>
+                  <div className="token-info">
+                    <h4 className="token-name">{token.name}</h4>
+                    <h5 className="token-symbol">{token.symbol}</h5>
+                  </div>
+                  <span className="token-balance">0</span>
+                </div>
+              )
+          )}
         </div>
       </div>
     </div>
