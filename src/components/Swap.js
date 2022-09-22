@@ -47,10 +47,15 @@ const Swap = () => {
     }
   };
   const replaceCurrentToken = (option, address) => {
-    if(option === "A" || option === "B"){
-      const newCurrentToken = tokens.filter(token => token.address === address)[0]
-      option === "A" ? setCurrentTokenA(newCurrentToken) : setCurrentTokenB(newCurrentToken)
-      setIsListModalToggled(false)
+    if (option === "A" || option === "B") {
+      const newCurrentToken = tokens.filter(
+        (token) => token.address === address
+      )[0];
+      option === "A"
+        ? setCurrentTokenA(newCurrentToken)
+        : setCurrentTokenB(newCurrentToken);
+      setIsListModalToggled(false);
+      setCurrentTokenSelected("");
     }
   };
   useEffect(() => {
@@ -98,7 +103,7 @@ const Swap = () => {
       </div>
       {isListModalToggled && (
         <TokenListModal
-        option={currentTokenSelected}
+          option={currentTokenSelected}
           replaceCurrentToken={replaceCurrentToken}
           tokens={tokens}
           setIsListModalToggled={setIsListModalToggled}
