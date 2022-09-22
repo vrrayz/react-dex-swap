@@ -1,9 +1,9 @@
 import React from "react";
 
-const TokenButton = ({token,setIsListModalToggled, isListModalToggled}) => {
+const TokenButton = ({token,toggleListModal,option}) => {
   const {symbol,img,address} = token
   return (
-    <button className="swap-select-btn" onClick={() => setIsListModalToggled(!isListModalToggled)}>
+    <button className="swap-select-btn" onClick={() => toggleListModal(option)}>
       <img src={img} alt={address} width="24"/>
       <span className="token">{symbol}</span>
       <svg

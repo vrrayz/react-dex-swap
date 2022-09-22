@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/TokenListModal.css";
 
-const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled}) => {
+const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled,replaceCurrentToken,option}) => {
   return (
     <div className="modal-overlay token-list-modal">
       <div className="modal-box">
@@ -31,7 +31,7 @@ const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled}) => {
           </div>
           {tokens.map((token) => 
             (
-                <div className="token-list-item" key={token.address}>
+                <div className="token-list-item" key={token.address} onClick={() => replaceCurrentToken(option,token.address)}>
                   <div className="token-info">
                     <h4 className="token-name">{token.name}</h4>
                     <h5 className="token-symbol">{token.symbol}</h5>

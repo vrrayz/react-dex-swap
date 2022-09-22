@@ -9,6 +9,7 @@ const Swap = () => {
   const [tokens, setTokens] = useState([]);
   const [currentTokenA, setCurrentTokenA] = useState({});
   const [currentTokenB, setCurrentTokenB] = useState({});
+  const [currentTokenSelected, setCurrentTokenSelected] = useState("");
   const [isListModalToggled, setIsListModalToggled] = useState(false);
 
   const getTokens = () => {
@@ -18,7 +19,11 @@ const Swap = () => {
         setTokens(
           Object.keys(tokens.data)
             .map((key) => {
-              let currentToken = { address: key, ...tokens.data[key], img:`https://tokens.pancakeswap.finance/images/${key}.png` };
+              let currentToken = {
+                address: key,
+                ...tokens.data[key],
+                img: `https://tokens.pancakeswap.finance/images/${key}.png`,
+              };
               if (key === "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c") {
                 setCurrentTokenA(currentToken);
               }
@@ -36,9 +41,28 @@ const Swap = () => {
         console.log(error);
       });
   };
+  const toggleListModal = (option) => {
+    if (option === "A" || option === "B") {
+      setCurrentTokenSelected(option);
+    }
+  };
+  const replaceCurrentToken = (option, address) => {
+    if(option === "A" || option === "B"){
+      const newCurrentToken = tokens.filter(token => token.address === address)[0]
+      option === "A" ? setCurrentTokenA(newCurrentToken) : setCurrentTokenB(newCurrentToken)
+      setIsListModalToggled(false)
+    }
+  };
   useEffect(() => {
     getTokens();
   }, []);
+  useEffect(() => {
+    if (currentTokenSelected === "A" || currentTokenSelected === "B") {
+      setIsListModalToggled(true);
+    } else {
+      setIsListModalToggled(false);
+    }
+  }, [currentTokenSelected]);
   return (
     <>
       <div className="swap-container">
@@ -50,9 +74,9 @@ const Swap = () => {
           <div className="swap-body">
             <div className="form-group">
               <TokenButton
+                option={"A"}
                 token={currentTokenA}
-                setIsListModalToggled={setIsListModalToggled}
-                isListModalToggled={isListModalToggled}
+                toggleListModal={toggleListModal}
               />
               <SwapInput />
               <button className="max-swap-btn">MAX</button>
@@ -60,9 +84,9 @@ const Swap = () => {
             <SwitchToken />
             <div className="form-group">
               <TokenButton
+                option={"B"}
                 token={currentTokenB}
-                setIsListModalToggled={setIsListModalToggled}
-                isListModalToggled={isListModalToggled}
+                toggleListModal={toggleListModal}
               />
               <SwapInput />
             </div>
@@ -74,6 +98,8 @@ const Swap = () => {
       </div>
       {isListModalToggled && (
         <TokenListModal
+        option={currentTokenSelected}
+          replaceCurrentToken={replaceCurrentToken}
           tokens={tokens}
           setIsListModalToggled={setIsListModalToggled}
           isListModalToggled={isListModalToggled}
