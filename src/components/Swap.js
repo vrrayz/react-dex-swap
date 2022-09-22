@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import TokenButton from "./TokenButton";
 import SwapInput from "./SwapInput";
 import SwitchToken from "./SwitchToken";
+import TokenListModal from "./TokenListModal";
 import "../styles/Swap.css";
 const url = "https://api.pancakeswap.info/api/v2/tokens";
 const Swap = () => {
   const [tokens, setToken] = useState([]);
+  const [isListModalToggled, setIsListModalToggled] = useState(false);
   const getTokens = () => {
     fetch(url)
       .then((res) => res.json())
@@ -26,6 +28,7 @@ const Swap = () => {
     getTokens();
   }, [tokens]);
   return (
+    <>
     <div className="swap-container">
       <div className="swap-box">
         <div className="swap-title">
@@ -34,13 +37,13 @@ const Swap = () => {
         </div>
         <div className="swap-body">
           <div className="form-group">
-            <TokenButton tokens={tokens}/>
+            <TokenButton setIsListModalToggled={setIsListModalToggled} isListModalToggled={isListModalToggled}/>
             <SwapInput />
             <button className="max-swap-btn">MAX</button>
           </div>
           <SwitchToken />
           <div className="form-group">
-            <TokenButton />
+            <TokenButton  setIsListModalToggled={setIsListModalToggled} isListModalToggled={isListModalToggled}/>
             <SwapInput />
           </div>
           <div className="form-group">
@@ -49,6 +52,8 @@ const Swap = () => {
         </div>
       </div>
     </div>
+    {isListModalToggled && (<TokenListModal />)}
+    </>
   );
 };
 

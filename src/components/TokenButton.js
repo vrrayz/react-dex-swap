@@ -1,8 +1,8 @@
 import React from "react";
 
-const TokenButton = () => {
+const TokenButton = ({setIsListModalToggled, isListModalToggled}) => {
   return (
-    <button className="swap-select-btn">
+    <button className="swap-select-btn" onClick={() => setIsListModalToggled(!isListModalToggled)}>
       <svg
         viewBox="0 0 96 96"
         width="24px"

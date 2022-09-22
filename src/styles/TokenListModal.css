@@ -1,0 +1,41 @@
+.modal-overlay.token-list-modal{
+    background-color:rgba(0,23,67, 0.9) ;
+}
+.modal-box.token-list-modal{
+    background-color: #000d2f;
+}
+.modal-title.token-list-modal{
+    background-color: transparent;
+    padding: 12px 8px;
+}
+.modal-body .swap-form{
+    /* width: 90%; */
+    /* margin: 8px auto; */
+    text-align: left;
+}
+.modal-body .form-group{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+}
+.token-list-item{
+   margin: 16px 0 8px 8px;
+}
+.token-list-modal .token-list-item{
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+}
+.token-list-item .token-info h4, .token-list-item .token-info h5{
+    margin: 0 0 4px 0px;
+}
+.token-info .token-name{
+    font-size: 12px;
+}
+.token-info .token-symbol{
+    font-size: 10px;
+}
+.token-list-item .token-balance{
+    margin: auto 0px;
+    font-size: 12px;
+}
