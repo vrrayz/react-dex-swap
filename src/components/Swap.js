@@ -4,29 +4,8 @@ import SwapInput from "./SwapInput";
 import SwitchToken from "./SwitchToken";
 import TokenListModal from "./TokenListModal";
 import "../styles/Swap.css";
-const url = "https://api.pancakeswap.info/api/v2/tokens";
 const Swap = () => {
-  const [tokens, setToken] = useState([]);
   const [isListModalToggled, setIsListModalToggled] = useState(false);
-  const getTokens = () => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((tokens) => {
-        setToken(
-          Object.keys(tokens.data).map(key => {
-            return {token: key,...tokens.data[key]}
-          }).filter((key, index) => {
-            return index < 20;
-          })
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  useEffect(() => {
-    getTokens();
-  }, [tokens]);
   return (
     <>
     <div className="swap-container">
