@@ -10,6 +10,8 @@ const Swap = () => {
   const [currentTokenA, setCurrentTokenA] = useState({});
   const [currentTokenB, setCurrentTokenB] = useState({});
   const [currentTokenSelected, setCurrentTokenSelected] = useState("");
+  const [tokenAInput, setTokenAInput] = useState(0.0);
+  const [tokenBInput, setTokenBInput] = useState(0.0);
   const [isListModalToggled, setIsListModalToggled] = useState(false);
 
   const getTokens = () => {
@@ -58,6 +60,22 @@ const Swap = () => {
       setCurrentTokenSelected("");
     }
   };
+  const calculateSwap = (tokenInput,value) => {
+    if(tokenInput === "tokenAInput" || tokenInput === "tokenBInput"){
+      if(tokenInput === "tokenAInput"){
+        setTokenAInput(value)
+        let bnbPriceBase = currentTokenA.price_BNB * value
+        let tokenPriceQuote = (1 / currentTokenB.price_BNB) * bnbPriceBase
+        setTokenBInput(tokenPriceQuote)
+      }
+      if(tokenInput === "tokenBInput"){
+        setTokenBInput(value)
+        let bnbPriceBase = currentTokenB.price_BNB * value
+        let tokenPriceQuote = (1 / currentTokenA.price_BNB) * bnbPriceBase
+        setTokenAInput(tokenPriceQuote)
+      }
+    }
+  }
   useEffect(() => {
     getTokens();
   }, []);
@@ -83,7 +101,11 @@ const Swap = () => {
                 token={currentTokenA}
                 toggleListModal={toggleListModal}
               />
-              <SwapInput />
+              <SwapInput
+                name="tokenAInput"
+                value={tokenAInput}
+                calculateSwap={calculateSwap}
+              />
               <button className="max-swap-btn">MAX</button>
             </div>
             <SwitchToken />
@@ -93,7 +115,11 @@ const Swap = () => {
                 token={currentTokenB}
                 toggleListModal={toggleListModal}
               />
-              <SwapInput />
+              <SwapInput
+                name="tokenBInput"
+                value={tokenBInput}
+                calculateSwap={calculateSwap}
+              />
             </div>
             <div className="form-group">
               <button className="swap-btn">Swap</button>
