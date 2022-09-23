@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
-const SwitchToken = () => {
+const SwitchToken = ({swithCurrentToken}) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div className="switch-token-container">
       <button
         className="switch-token-btn"
+        onClick={swithCurrentToken}
         onMouseEnter={() => setIsHovered(!isHovered)}
         onMouseOut={() => setIsHovered(!isHovered)}
       >

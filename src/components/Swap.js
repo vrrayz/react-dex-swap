@@ -83,6 +83,14 @@ const Swap = () => {
     let tokenPriceQuote = (1 / quoteObj.price_BNB) * bnbPriceBase;
     return tokenPriceQuote
   };
+  const swithCurrentToken = () => {
+    let temp = currentTokenA
+    setCurrentTokenA(currentTokenB)
+    setCurrentTokenB(temp)
+    temp = tokenAInput
+    setTokenAInput(tokenBInput)
+    setTokenBInput(temp)
+  }
   useEffect(() => {
     getTokens();
   }, []);
@@ -115,7 +123,7 @@ const Swap = () => {
               />
               <button className="max-swap-btn">MAX</button>
             </div>
-            <SwitchToken />
+            <SwitchToken swithCurrentToken={swithCurrentToken}/>
             <div className="form-group">
               <TokenButton
                 option={"B"}
