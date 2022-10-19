@@ -19,12 +19,12 @@ const TokenListModal = ({originalTokenList,tokens,setIsListModalToggled,isListMo
       )
     }
   },[searchInput,originalTokenList])
-  useEffect(() => {
-    // if(modalTokens){
-    //   console.log(modalTokens)
-    // }
-    console.log(modalTokens)
-  },[modalTokens])
+  // useEffect(() => {
+  //   // if(modalTokens){
+  //   //   console.log(modalTokens)
+  //   // }
+  //   console.log(modalTokens)
+  // },[modalTokens])
   return (
     <div className="modal-overlay token-list-modal">
       <div className="modal-box">

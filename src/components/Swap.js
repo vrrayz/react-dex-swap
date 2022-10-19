@@ -5,7 +5,6 @@ import SwitchToken from "./SwitchToken";
 import TokenListModal from "./TokenListModal";
 import "../styles/Swap.css";
 import { tokenData } from "../data/tokens";
-const url = "https://api.pancakeswap.info/api/v2/tokens";
 const Swap = () => {
   const [originalTokenList, setOriginalTokenList] = useState([]);
   const [tokens, setTokens] = useState([]);
