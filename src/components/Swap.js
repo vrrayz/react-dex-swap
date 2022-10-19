@@ -41,7 +41,7 @@ const Swap = () => {
   };
   const replaceCurrentToken = (option, address) => {
     if (option === "A" || option === "B") {
-      const newCurrentToken = tokens.filter(
+      const newCurrentToken = originalTokenList.filter(
         (token) => token.address === address
       )[0];
       if (option === "A") {
@@ -138,6 +138,7 @@ const Swap = () => {
       </div>
       {isListModalToggled && (
         <TokenListModal
+          originalTokenList={originalTokenList}
           option={currentTokenSelected}
           replaceCurrentToken={replaceCurrentToken}
           tokens={tokens}

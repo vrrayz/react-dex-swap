@@ -1,7 +1,30 @@
-import React from "react";
+import React, {useState} from "react";
+import { useEffect } from "react";
 import "../styles/TokenListModal.css";
 
-const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled,replaceCurrentToken,option}) => {
+const TokenListModal = ({originalTokenList,tokens,setIsListModalToggled,isListModalToggled,replaceCurrentToken,option}) => {
+  const [searchInput, setSearchInput] = useState("")
+  const [modalTokens, setModalTokens] = useState(tokens)
+
+  const changeInput = (e) => {
+    // console.log(e.target.value)
+    setSearchInput(e.target.value)
+  }
+  useEffect(()=>{
+    if(searchInput){
+      setModalTokens(
+        originalTokenList.filter((token, index) => {
+          return token.address.indexOf(searchInput) > -1;
+        })
+      )
+    }
+  },[searchInput,originalTokenList])
+  useEffect(() => {
+    // if(modalTokens){
+    //   console.log(modalTokens)
+    // }
+    console.log(modalTokens)
+  },[modalTokens])
   return (
     <div className="modal-overlay token-list-modal">
       <div className="modal-box">
@@ -26,10 +49,11 @@ const TokenListModal = ({tokens,setIsListModalToggled,isListModalToggled,replace
             <input
               type="text"
               className="swap-form"
+              onChange={changeInput}
               placeholder="Token address or name"
             />
           </div>
-          {tokens.map((token) => 
+          {modalTokens.map((token) => 
             (
                 <div className="token-list-item" key={token.address} onClick={() => replaceCurrentToken(option,token.address)}>
                   <div className="token-info">
