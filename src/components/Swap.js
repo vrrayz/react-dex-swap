@@ -36,12 +36,20 @@ const Swap = ({isConnected, signer,userAddress}) => {
   const getTokens = () => {
     setTokens(
       originalTokenList.filter((token, index) => {
-        if (token.address === "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c") {
+        if (token.address === "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd") {
           setCurrentTokenA(token);
         }
-        if (token.address === "0x3203c9E46cA618C8C1cE5dC67e7e9D75f5da2377") {
+        if (token.address === "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7") {
           setCurrentTokenB(token);
         }
+        // ************* Mainnet code below *************************
+
+        // if (token.address === "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c") {
+        //   setCurrentTokenA(token);
+        // }
+        // if (token.address === "0x3203c9E46cA618C8C1cE5dC67e7e9D75f5da2377") {
+        //   setCurrentTokenB(token);
+        // }
         return index < 20;
       })
     );
