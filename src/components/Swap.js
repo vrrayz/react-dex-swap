@@ -5,22 +5,35 @@ import SwitchToken from "./SwitchToken";
 import TokenListModal from "./TokenListModal";
 import "../styles/Swap.css";
 import { tokenData } from "../data/tokens";
-const Swap = () => {
+
+import { ethers } from "ethers";
+
+// Smart Contract Addresses/ABI imports
+import { swapCA,swapABI } from "../data/contractAbi";
+import BigNumber from "bignumber.js";
+
+const Swap = ({isConnected, signer,userAddress}) => {
   const [originalTokenList, setOriginalTokenList] = useState([]);
   const [tokens, setTokens] = useState([]);
   const [currentTokenA, setCurrentTokenA] = useState({});
   const [currentTokenB, setCurrentTokenB] = useState({});
+  const [tokenABalance, setTokenABalance] = useState(0.0);
+  const [tokenBBalance, setTokenBBalance] = useState(0.0);
   const [currentTokenSelected, setCurrentTokenSelected] = useState("");
   const [tokenAInput, setTokenAInput] = useState(0.0);
   const [tokenBInput, setTokenBInput] = useState(0.0);
   const [isListModalToggled, setIsListModalToggled] = useState(false);
 
+  const [swapContract, setSwapContract] = useState("");
+
+  // Store all tokens from the original list
   const storeOriginalList = async () => {
     const tokenList = await tokenData();
     setOriginalTokenList(tokenList);
   };
+
+  // Get and filter all tokens
   const getTokens = () => {
-    // console.log(originalTokenList)
     setTokens(
       originalTokenList.filter((token, index) => {
         if (token.address === "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c") {
@@ -81,6 +94,19 @@ const Swap = () => {
     setTokenAInput(tokenBInput);
     setTokenBInput(temp);
   };
+  const tokenDecimals = async(tokenAddress) => {
+    // console.log(tokenAddress)
+    let decimals = await swapContract.getTokenDecimals(tokenAddress)
+    let result = BigNumber.from(10).pow(decimals).toNumber()
+    console.log("The token decimal for this is == ",result)
+  }
+  const getUserTokenBalance = async (tokenAddress) => {
+    // const balance = await swapContract.getBalance(tokenAddress,userAddress);
+    tokenDecimals(tokenAddress)
+    // const approved = await stablesContract.allowance(userAddress,minerCA)
+    // setStablesBalance(balance.div(decimals).toNumber())
+    // setApprovedBalance(approved.div(decimals).toNumber())
+  };
   useEffect(() => {
     storeOriginalList();
   }, []);
@@ -94,6 +120,18 @@ const Swap = () => {
       setIsListModalToggled(false);
     }
   }, [currentTokenSelected]);
+  useEffect(() => {
+    if(signer){
+      console.log(swapCA)
+      setSwapContract(new ethers.Contract(swapCA,swapABI,signer))
+    }
+    // console.log("// Checking if this runs once")
+  },[signer])
+  useEffect(() => {
+    if(swapContract){
+      getUserTokenBalance(currentTokenA.address)
+    }
+  },[swapContract,currentTokenA])
   return (
     <>
       <div className="swap-container">

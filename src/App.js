@@ -78,7 +78,7 @@ function App() {
           connectDapp={connectDapp}
         />
       )}
-      <Swap/>
+      <Swap isConnected={isConnected} signer={signer} userAddress={userAddress}/>
     </>
   );
 }
