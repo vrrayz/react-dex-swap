@@ -53,11 +53,15 @@ const Swap = ({ isConnected, signer, userAddress }) => {
       })
     );
   };
+
+  // Toggle token list modal
   const toggleListModal = (option) => {
     if (option === "A" || option === "B") {
       setCurrentTokenSelected(option);
     }
   };
+
+  // change to selected token
   const replaceCurrentToken = (option, address) => {
     if (option === "A" || option === "B") {
       const newCurrentToken = originalTokenList.filter(
@@ -65,10 +69,8 @@ const Swap = ({ isConnected, signer, userAddress }) => {
       )[0];
       if (option === "A") {
         setCurrentTokenA(newCurrentToken);
-        // setTokenAInput(calculateSwap(currentTokenB,currentTokenA,tokenBInput))
       } else {
         setCurrentTokenB(newCurrentToken);
-        // setTokenBInput(calculateSwap(currentTokenA,currentTokenB,tokenAInput))
       }
       setIsListModalToggled(false);
       setCurrentTokenSelected("");
@@ -76,6 +78,8 @@ const Swap = ({ isConnected, signer, userAddress }) => {
       setTokenBInput(0.0);
     }
   };
+
+
   const setSwapInput = (tokenInput, value) => {
     if (tokenInput === "tokenAInput" || tokenInput === "tokenBInput") {
       if (tokenInput === "tokenAInput") {
@@ -88,11 +92,13 @@ const Swap = ({ isConnected, signer, userAddress }) => {
       }
     }
   };
+
   const calculateSwap = (baseObj, quoteObj, value) => {
     let bnbPriceBase = baseObj.price_BNB * value;
     let tokenPriceQuote = (1 / quoteObj.price_BNB) * bnbPriceBase;
     return tokenPriceQuote;
   };
+
   const swithCurrentToken = () => {
     let temp = currentTokenA;
     setCurrentTokenA(currentTokenB);
@@ -101,12 +107,12 @@ const Swap = ({ isConnected, signer, userAddress }) => {
     setTokenAInput(tokenBInput);
     setTokenBInput(temp);
   };
+
   const tokenDecimals = async (tokenAddress) => {
-    // console.log(tokenAddress)
     let tD = await swapContract.getTokenDecimals(tokenAddress);
-    // let result = BigNumber.from(10).pow(tD)
     return tD.toNumber();
   };
+
   const getUserTokenBalance = async (tokenAddress) => {
     const balance =
       tokenAddress === nativeToken
@@ -116,12 +122,14 @@ const Swap = ({ isConnected, signer, userAddress }) => {
     const tokenBalance = ethers.utils.formatUnits(balance, decimals);
     return tokenBalance;
   };
+
   const setTokenBalances = async () => {
     let aBalance = await getUserTokenBalance(currentTokenA.address);
     let bBalance = await getUserTokenBalance(currentTokenB.address);
     setTokenABalance(aBalance);
     setTokenBBalance(bBalance);
   };
+
   useEffect(() => {
     storeOriginalList();
   }, []);
@@ -139,7 +147,6 @@ const Swap = ({ isConnected, signer, userAddress }) => {
     if (signer && userAddress) {
       setSwapContract(new ethers.Contract(swapCA, swapABI, signer));
     }
-    // console.log("// Checking if this runs once")
   }, [signer, userAddress]);
   useEffect(() => {
     if (swapContract) {
