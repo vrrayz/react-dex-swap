@@ -60,3 +60,6 @@ export const tokenData = async () => {
   // });
   // return result;
 };
+
+export const nativeToken = "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd" // testnet wbnb
+// export const nativeToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" // mainnet wbnb

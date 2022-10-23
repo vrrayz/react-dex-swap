@@ -4,15 +4,14 @@ import SwapInput from "./SwapInput";
 import SwitchToken from "./SwitchToken";
 import TokenListModal from "./TokenListModal";
 import "../styles/Swap.css";
-import { tokenData } from "../data/tokens";
+import { tokenData, nativeToken } from "../data/tokens";
 
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 // Smart Contract Addresses/ABI imports
-import { swapCA,swapABI } from "../data/contractAbi";
-import BigNumber from "bignumber.js";
+import { swapCA, swapABI } from "../data/contractAbi";
 
-const Swap = ({isConnected, signer,userAddress}) => {
+const Swap = ({ isConnected, signer, userAddress }) => {
   const [originalTokenList, setOriginalTokenList] = useState([]);
   const [tokens, setTokens] = useState([]);
   const [currentTokenA, setCurrentTokenA] = useState({});
@@ -36,7 +35,7 @@ const Swap = ({isConnected, signer,userAddress}) => {
   const getTokens = () => {
     setTokens(
       originalTokenList.filter((token, index) => {
-        if (token.address === "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd") {
+        if (token.address === nativeToken) {
           setCurrentTokenA(token);
         }
         if (token.address === "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7") {
@@ -102,18 +101,26 @@ const Swap = ({isConnected, signer,userAddress}) => {
     setTokenAInput(tokenBInput);
     setTokenBInput(temp);
   };
-  const tokenDecimals = async(tokenAddress) => {
+  const tokenDecimals = async (tokenAddress) => {
     // console.log(tokenAddress)
-    let decimals = await swapContract.getTokenDecimals(tokenAddress)
-    let result = BigNumber.from(10).pow(decimals).toNumber()
-    console.log("The token decimal for this is == ",result)
-  }
+    let tD = await swapContract.getTokenDecimals(tokenAddress);
+    // let result = BigNumber.from(10).pow(tD)
+    return tD.toNumber();
+  };
   const getUserTokenBalance = async (tokenAddress) => {
-    // const balance = await swapContract.getBalance(tokenAddress,userAddress);
-    tokenDecimals(tokenAddress)
-    // const approved = await stablesContract.allowance(userAddress,minerCA)
-    // setStablesBalance(balance.div(decimals).toNumber())
-    // setApprovedBalance(approved.div(decimals).toNumber())
+    const balance =
+      tokenAddress === nativeToken
+        ? await signer.getBalance()
+        : await swapContract.getBalance(tokenAddress, userAddress);
+    let decimals = await tokenDecimals(tokenAddress);
+    const tokenBalance = ethers.utils.formatUnits(balance, decimals);
+    return tokenBalance;
+  };
+  const setTokenBalances = async () => {
+    let aBalance = await getUserTokenBalance(currentTokenA.address);
+    let bBalance = await getUserTokenBalance(currentTokenB.address);
+    setTokenABalance(aBalance);
+    setTokenBBalance(bBalance);
   };
   useEffect(() => {
     storeOriginalList();
@@ -129,17 +136,16 @@ const Swap = ({isConnected, signer,userAddress}) => {
     }
   }, [currentTokenSelected]);
   useEffect(() => {
-    if(signer){
-      console.log(swapCA)
-      setSwapContract(new ethers.Contract(swapCA,swapABI,signer))
+    if (signer && userAddress) {
+      setSwapContract(new ethers.Contract(swapCA, swapABI, signer));
     }
     // console.log("// Checking if this runs once")
-  },[signer])
+  }, [signer, userAddress]);
   useEffect(() => {
-    if(swapContract){
-      getUserTokenBalance(currentTokenA.address)
+    if (swapContract) {
+      setTokenBalances();
     }
-  },[swapContract,currentTokenA])
+  }, [swapContract, currentTokenA,currentTokenB]);
   return (
     <>
       <div className="swap-container">
@@ -154,6 +160,7 @@ const Swap = ({isConnected, signer,userAddress}) => {
                 option={"A"}
                 token={currentTokenA}
                 toggleListModal={toggleListModal}
+                tokenBalance={tokenABalance}
               />
               <SwapInput
                 name="tokenAInput"
@@ -168,6 +175,7 @@ const Swap = ({isConnected, signer,userAddress}) => {
                 option={"B"}
                 token={currentTokenB}
                 toggleListModal={toggleListModal}
+                tokenBalance={tokenBBalance}
               />
               <SwapInput
                 name="tokenBInput"

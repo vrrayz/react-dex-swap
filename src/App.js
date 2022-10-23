@@ -31,7 +31,7 @@ function App() {
           throw new Error("Error Connecting to wallet");
         });
     } else {
-      console.log("clicked")
+      console.log("clicked");
       setWallet(optionSelected);
       setProvider(new ethers.providers.Web3Provider(window.ethereum));
     }
@@ -41,25 +41,28 @@ function App() {
       if (wallet === "Metamask") {
         try {
           await provider
-          .send("eth_requestAccounts", []).then(() => setSigner(provider.getSigner()))
+            .send("eth_requestAccounts", [])
+            .then(() => setSigner(provider.getSigner()));
         } catch (error) {
-          setWallet("")
+          setWallet("");
         }
-      }else{
-        setSigner(provider.getSigner())
+      } else {
+        setSigner(provider.getSigner());
       }
     }
+  };
+  const connect = async () => {
+    const ad = await signer.getAddress();
+    setUserAddress(ad);
+    setIsModalToggled(!isModalToggled);
+    setIsConnected(true);
   };
   useEffect(() => {
     walletRequest();
   }, [provider, wallet]);
   useEffect(() => {
     if (signer !== "") {
-      signer.getAddress().then((res) => {
-        setUserAddress(res);
-        setIsModalToggled(!isModalToggled);
-        setIsConnected(true);
-      });
+      connect();
     }
   }, [signer]);
   return (
@@ -78,7 +81,11 @@ function App() {
           connectDapp={connectDapp}
         />
       )}
-      <Swap isConnected={isConnected} signer={signer} userAddress={userAddress}/>
+      <Swap
+        isConnected={isConnected}
+        userAddress={userAddress}
+        signer={signer}
+      />
     </>
   );
 }
