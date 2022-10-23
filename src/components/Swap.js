@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import TokenButton from "./TokenButton";
 import SwapInput from "./SwapInput";
 import SwitchToken from "./SwitchToken";
@@ -108,12 +108,12 @@ const Swap = ({ isConnected, signer, userAddress }) => {
     setTokenBInput(temp);
   };
 
-  const tokenDecimals = async (tokenAddress) => {
+  const tokenDecimals = useCallback(async (tokenAddress) => {
     let tD = await swapContract.getTokenDecimals(tokenAddress);
     return tD.toNumber();
-  };
+  },[swapContract]);
 
-  const getUserTokenBalance = async (tokenAddress) => {
+  const getUserTokenBalance = useCallback(async (tokenAddress) => {
     const balance =
       tokenAddress === nativeToken
         ? await signer.getBalance()
@@ -121,14 +121,38 @@ const Swap = ({ isConnected, signer, userAddress }) => {
     let decimals = await tokenDecimals(tokenAddress);
     const tokenBalance = ethers.utils.formatUnits(balance, decimals);
     return tokenBalance;
-  };
+  },[signer, swapContract, tokenDecimals, userAddress]);
 
-  const setTokenBalances = async () => {
+  const setTokenBalances = useCallback(async () => {
     let aBalance = await getUserTokenBalance(currentTokenA.address);
     let bBalance = await getUserTokenBalance(currentTokenB.address);
     setTokenABalance(aBalance);
     setTokenBBalance(bBalance);
-  };
+  },[currentTokenA.address, currentTokenB.address, getUserTokenBalance]);
+
+  const swapFunction = async () => {
+    const inputToken = currentTokenA.address;
+    const outputToken = currentTokenB.address;
+    let inputAmount = tokenAInput;
+    let decimals = await tokenDecimals(inputToken);
+
+    if(inputToken === nativeToken){
+      // call the wethtoken function here
+      inputAmount = ethers.utils.parseEther(inputAmount)
+      await swapContract.WETHTokenSwap(outputToken,{value: inputAmount})
+    }else{
+      // call the swaptoken function here
+      inputAmount = ethers.utils.parseUnits(inputAmount,decimals)
+      await swapContract.swapTokens(inputToken,inputAmount,outputToken)
+    }
+    tokenSwapListener(inputToken,inputAmount,outputToken);
+  }
+
+  const tokenSwapListener = (inputToken,inputAmount,outputToken) => {
+    swapContract.on("SwapTokens", (userAddress,inputToken,inputAmount,outputToken) => {
+      setTokenBalances()
+    })
+  }
 
   useEffect(() => {
     storeOriginalList();
@@ -152,7 +176,7 @@ const Swap = ({ isConnected, signer, userAddress }) => {
     if (swapContract) {
       setTokenBalances();
     }
-  }, [swapContract, currentTokenA,currentTokenB]);
+  }, [swapContract, currentTokenA, currentTokenB, setTokenBalances]);
   return (
     <>
       <div className="swap-container">
@@ -191,7 +215,7 @@ const Swap = ({ isConnected, signer, userAddress }) => {
               />
             </div>
             <div className="form-group">
-              <button className="swap-btn">Swap</button>
+              <button className="swap-btn" onClick={swapFunction}>Swap</button>
             </div>
           </div>
         </div>
