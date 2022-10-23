@@ -1,4 +1,4 @@
-export const swapCA = "0x2774E9A00fd4bAa89F05e42ce99043A1D9f13Dbd";
+export const swapCA = "0x40ecA28e7C50E55E82A24Accb12AF28c9202eB7F";
 
 export const swapABI = [
   {
@@ -48,6 +48,15 @@ export const swapABI = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "contract ERC20", name: "token", type: "address" },
+    ],
+    name: "WETHTokenSwap",
+    outputs: [],
+    stateMutability: "payable",
     type: "function",
   },
   {
